@@ -1,0 +1,20 @@
+<div class="pb-4">
+    <app-boton-home 
+        icono="fas fa-globe-americas"
+        titulo="Geolocalización"
+        ruta="dashboard/geolocalizar"
+    ></app-boton-home>
+    
+    <app-boton-home 
+        icono="fas fa-tools"
+        titulo="Eventos"
+        ruta="dashboard/eventos"
+    ></app-boton-home>
+    
+    <app-boton-home
+        *ngIf="usuario.role === 'ADMIN_ROLE'"
+        icono="fas fa-user"
+        titulo="Usuarios"
+        ruta="dashboard/usuarios"
+    ></app-boton-home>
+</div>

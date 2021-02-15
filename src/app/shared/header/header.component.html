@@ -1,0 +1,34 @@
+<nav class="flex animate__animated animate__fadeIn bg-white items-center justify-between border-l-8 border-blue-500 flex-wrap p-5 shadow">
+    <div class="flex items-center lg:flex-shrink-0 w-full lg:w-auto justify-between">
+      <div>
+        <a routerLink="/dashboard/home" class="ml-0 outline-none lg:ml-2 text-xl text-gray-800 cursor-pointer"> <span class="text-blue-500">Geo</span>Tasks - Eventos <i class="fas fa-tools text-blue-500"></i> </a>
+      </div>
+    </div>
+    <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+      <div class="lg:block lg:flex-grow ml-0 lg:ml-7 text-gray-800">
+        <a routerLinkActive="text-blue-500" routerLink="/dashboard/home" class="block outline-none lg:inline-block mt-4 lg:mt-0 cursor-pointer md:mr-4 hover:text-blue-500"> 
+          <i class="fas fa-home mr-1"></i>
+          Home
+        </a>
+        <a routerLinkActive="text-blue-500" routerLink="/dashboard/geolocalizar" class="block outline-none lg:inline-block mt-4 lg:mt-0 mr-4 cursor-pointer hover:text-blue-500"> 
+          <i class="fas fa-globe-americas mr-1"></i>
+          Geolocalizar eventos
+        </a>
+        <a routerLinkActive="text-blue-500" routerLink="/dashboard/eventos" class="block outline-none lg:inline-block mt-4 lg:mt-0 cursor-pointer mr-4 hover:text-blue-500"> 
+          <i class="fas fa-tools mr-1"></i>
+          Tus eventos
+        </a>
+        <a *ngIf="usuarioLogin.role == 'ADMIN_ROLE'" routerLinkActive="text-blue-500" routerLink="/dashboard/usuarios" class="block outline-none lg:inline-block mt-4 lg:mt-0 cursor-pointer mr-4 hover:text-blue-500"> 
+          <i class="fas fa-user mr-1"></i>
+          Usuarios
+        </a>
+      </div>
+  
+    <div class="md:flex md:items-center md:justify-between">
+        <button (click)="logout()" class="mt-5 outline-none lg:mt-0 lg:mt-0 inline-block px-0 py-2 leading-none text-gray-700 font-semibold focus:outline-none hover:text-red-500"> 
+          <i class="fas fa-sign-out-alt mr-1"></i>
+          Cerrar Sesión 
+        </button>
+      </div>
+    </div>
+</nav>
