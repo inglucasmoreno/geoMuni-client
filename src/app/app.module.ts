@@ -7,11 +7,12 @@ import { AuthModule } from './auth/auth.module';
 import { NotpagefoundComponent } from './notpagefound/notpagefound.component';
 import { PagesModule } from './pages/pages.module';
 import { ComponentsModule } from './components/components.module';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NotpagefoundComponent
+    NotpagefoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -19,6 +20,7 @@ import { ComponentsModule } from './components/components.module';
     AuthModule,
     PagesModule,
     ComponentsModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]

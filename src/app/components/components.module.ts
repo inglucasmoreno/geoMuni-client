@@ -6,6 +6,7 @@ import { PastillaComponent } from './pastilla/pastilla.component';
 import { TarjetaComponent } from './tarjeta/tarjeta.component';
 import { BotonTablaComponent } from './boton-tabla/boton-tabla.component';
 import { BotonEstadoComponent } from './boton-estado/boton-estado.component';
+import { BotonRealizarComponent } from './boton-realizar/boton-realizar.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { BotonEstadoComponent } from './boton-estado/boton-estado.component';
     TarjetaComponent,
     BotonTablaComponent,
     BotonEstadoComponent,
+    BotonRealizarComponent,
   ],
   imports: [
     CommonModule
@@ -25,7 +27,8 @@ import { BotonEstadoComponent } from './boton-estado/boton-estado.component';
     PastillaComponent,
     TarjetaComponent,
     BotonTablaComponent,
-    BotonEstadoComponent
+    BotonEstadoComponent,
+    BotonRealizarComponent
   ]
 })
 export class ComponentsModule { }

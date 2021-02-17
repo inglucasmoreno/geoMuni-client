@@ -14,8 +14,11 @@ export class TiposService {
   
   // Listar tipos
   listarTipos(activo = null): Observable<any> {
+
     return this.http.get(`${baseUrl}/tipos`, { 
-      params: { activo }, 
+      params: { 
+        activo: activo ? activo : ''
+      }, 
       headers: { 'x-token': localStorage.getItem('token') }
     });
   }

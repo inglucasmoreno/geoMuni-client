@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { TiposService } from '../../services/tipos.service';
 import { EventosService } from '../../services/eventos.service';
 import { Evento } from 'src/app/models/evento.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-geolocalizar',
@@ -118,7 +119,7 @@ export class GeolocalizarComponent implements OnInit {
     })
 
     
-    this.eventoService.listarEventos().subscribe( ({eventos}) => {
+    this.eventoService.listarEventos(true).subscribe( ({eventos}) => {
       eventos.forEach( (evento: Evento) => {
         
         // Circulo
@@ -132,14 +133,30 @@ export class GeolocalizarComponent implements OnInit {
         // Marcador
         const marcador = L.marker([Number(evento.lat), Number(evento.lng)],{icon}).bindPopup(`
           <div class="rounded p-3">  
-            <h1 class="border shadow border-l-8 border-gray-700 rounded shadow p-2 text-center"> <b> Tipo de evento - </b> ${evento.tipo['descripcion']} </h1> 
-            <div class="mt-2 border shadow rounded">
-              <h2 class="font-semibold bg-gray-700 text-white p-1"> Descripción </h2> 
-              <div class="p-2 rounded">
-                <span> ${evento.descripcion} </span>  
+          <div class="broder shadow rounded mt-2">
+          <h1 class="bg-blue-500 text-white font-semibold p-1 rounded-t text-center"> Tipo de evento </h1> 
+          <div class="text-center font-semibold p-1 text-gray-700">
+            <span> ${evento.tipo['descripcion']} </span> 
+          </div>
+            </div>
+            
+            <div class="broder shadow rounded mt-2">
+              <h1 class="bg-blue-500 text-white font-semibold p-1 rounded-t text-center"> Fecha de creación </h1> 
+              <div class="text-center font-semibold p-1 text-gray-700">
+                <span> ${moment(evento.createdAt).format('DD-MM-YYYY')} </span> 
               </div>
             </div>
-            <button class="p-2 shadow bg-gray-700 text-white mt-2 w-full rounded font-semibold"> Ingresar al evento </button>
+            <div class="mt-2 border shadow rounded text-center">
+              <h2 class="font-semibold bg-blue-500 rounded-t text-white py-1 px-2"> Descripción del evento </h2> 
+              <div class="p-2 rounded">
+                <span> ${evento.descripcion ? evento.descripcion : 'Sin descripción'} </span>  
+              </div>
+            </div>
+            <button 
+              onclick="location.href='dashboard/eventos/ver/${evento._id}'"  
+              class="p-2 shadow bg-gray-600 text-white mt-2 w-full rounded font-semibold"> 
+                Ingresar al evento 
+              </button>
           </div>
         `);    
         

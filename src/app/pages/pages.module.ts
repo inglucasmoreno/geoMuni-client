@@ -14,18 +14,22 @@ import { ComponentsModule } from '../components/components.module';
 import { NuevoUsuarioComponent } from './usuarios/nuevo-usuario.component';
 import { EditarUsuarioComponent } from './usuarios/editar/editar-usuario.component';
 import { EditarPasswordComponent } from './usuarios/editar/editar-password.component';
+import { PipesModule } from '../pipes/pipes.module';
+import { EventoComponent } from './eventos/evento.component';
+import { EditarEventoComponent } from './eventos/editar/editar-evento/editar-evento.component';
 
 @NgModule({
   declarations: [
     HomeComponent, 
-    PagesComponent, GeolocalizarComponent, UsuariosComponent, EventosComponent, NuevoUsuarioComponent, EditarUsuarioComponent, EditarPasswordComponent,
+    PagesComponent, GeolocalizarComponent, UsuariosComponent, EventosComponent, NuevoUsuarioComponent, EditarUsuarioComponent, EditarPasswordComponent, EventoComponent, EditarEventoComponent,
   ],
   imports: [
     CommonModule,
     RouterModule,
     ReactiveFormsModule,
     SharedModule,
-    ComponentsModule
+    ComponentsModule,
+    PipesModule
   ]
 })
 export class PagesModule { }

@@ -19,11 +19,32 @@ export class EventosService {
     })
   }
 
+  // Evento por ID
+  getEvento(id: string): Observable<any> {
+    return this.http.get(`${baseUrl}/eventos/${id}`,{
+      headers: { 'x-token': localStorage.getItem('token') }
+    })
+  }
+
   // Listar eventos
-  listarEventos(): Observable<any> {
+  listarEventos(activo = null, desde = 0, limit = 0, descripcion = '', tipo = ''): Observable<any> {
     return this.http.get(`${baseUrl}/eventos`, {
+      params: {
+        activo: activo ? activo : '',
+        desde: String(desde),
+        limit: String(limit),
+        descripcion,
+        tipo
+      },
       headers: {'x-token': localStorage.getItem('token')}
     })
+  }
+
+  // Actualizar evento
+  actualizarEvento(id, data): Observable<any> {
+    return this.http.put(`${baseUrl}/eventos/${id}`, data, {
+      headers: {'x-token': localStorage.getItem('token')}
+    });
   }
 
 }

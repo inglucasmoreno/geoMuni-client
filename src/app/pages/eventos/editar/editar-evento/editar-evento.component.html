@@ -1,0 +1,60 @@
+<app-tarjeta>
+    <div class="flex items-center justify-between md:ml-0 rounded-top text-gray-600 p-2 text-2xl font-hairline">
+        <div class="flex items-center bg-gray-100 text-gray-600 font-hairline px-3 py-2 text-xl rounded-t">
+            <app-boton-volver ruta='/dashboard/eventos'></app-boton-volver>
+            <div>
+                <h1 class="ml-1"> Evento </h1>
+                <app-pastilla
+                    texto="Editando evento"
+                    icono="fas fa-pencil-alt">
+                </app-pastilla>
+            </div>
+        </div>
+        <app-boton-tabla
+            *ngIf="!loading && usuarioLogin.role === 'ADMIN_ROLE'" 
+            titulo="Actualizar evento"
+            icono="fas fa-check"
+            (click)="actualizarEvento()"
+        ></app-boton-tabla>   
+    </div>
+    <div class="p-4 md:flex justify-between">
+        <div class="w-full md:w-1/2">
+            <img class="mr-auto ml-auto rounded shadow border-t-8 border-blue-500 w-full" src="assets/sin-foto.png" alt="Imagen de evento">
+        </div>
+        <form class="w-full md:w-1/2 md:ml-2 mt-2 md:mt-0"
+              [formGroup]="eventoForm"
+              >
+            <div class="border shadow">
+                <h1 class="bg-blue-500 text-white p-1 rounded-t text-center text-sm font-semibold"> Tipo de evento </h1>
+                <!-- <div *ngIf="!loading" class="p-1 text-center font-semibold text-sm"> {{ evento.tipo['descripcion'] }} </div> -->
+                <select *ngIf="!loading" 
+                        formControlName="tipo"
+                        class="w-full text-center p-1 text-gray-700 text-sm">
+                    <option *ngFor="let tipo of tipos" [value]="tipo._id"> {{ tipo.descripcion }} </option>
+                </select>
+                <div *ngIf="loading" class="text-gray-500 p-1 text-sm text-center">
+                    <i class="fas fa-spinner animate-spin"></i> Cargando tipo
+                </div>
+            </div>   
+            <div class="border shadow mt-2">
+                <h1 class="bg-blue-500 text-white p-1 rounded-t text-center text-sm font-semibold"> Fecha de creación </h1>
+                <div *ngIf="!loading" class="p-1 bg-gray-200 text-center text-sm"> {{ evento.createdAt | fecha }} </div>
+                <div *ngIf="loading" class="text-gray-500 p-1 text-sm text-center">
+                    <i class="fas fa-spinner animate-spin"></i> Cargando fecha
+                </div>
+            </div>   
+            <div class="border shadow mt-2">
+                <h1 class="bg-blue-500 text-white p-1 rounded-t text-center text-sm font-semibold"> Descripción </h1>
+                <!-- <div *ngIf="!loading" class="p-1 text-center text-sm"> {{ evento.descripcion }} </div> -->
+                <input *ngIf="!loading" 
+                        class="p-1 w-full rounded text-center text-sm" 
+                        placeholder="Descripción de evento" 
+                        formControlName="descripcion"
+                        type="text">
+                <div *ngIf="loading" class="text-gray-500 p-1 text-sm text-center">
+                    <i class="fas fa-spinner animate-spin"></i> Cargando descripción
+                </div>
+            </div>    
+        </form>
+    </div>
+</app-tarjeta>
