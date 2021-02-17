@@ -26,10 +26,9 @@
               >
             <div class="border shadow">
                 <h1 class="bg-blue-500 text-white p-1 rounded-t text-center text-sm font-semibold"> Tipo de evento </h1>
-                <!-- <div *ngIf="!loading" class="p-1 text-center font-semibold text-sm"> {{ evento.tipo['descripcion'] }} </div> -->
                 <select *ngIf="!loading" 
                         formControlName="tipo"
-                        class="w-full text-center p-1 text-gray-700 text-sm">
+                        class="w-full p-1 text-center text-gray-700 text-sm">
                     <option *ngFor="let tipo of tipos" [value]="tipo._id"> {{ tipo.descripcion }} </option>
                 </select>
                 <div *ngIf="loading" class="text-gray-500 p-1 text-sm text-center">
@@ -45,7 +44,6 @@
             </div>   
             <div class="border shadow mt-2">
                 <h1 class="bg-blue-500 text-white p-1 rounded-t text-center text-sm font-semibold"> Descripción </h1>
-                <!-- <div *ngIf="!loading" class="p-1 text-center text-sm"> {{ evento.descripcion }} </div> -->
                 <input *ngIf="!loading" 
                         class="p-1 w-full rounded text-center text-sm" 
                         placeholder="Descripción de evento" 

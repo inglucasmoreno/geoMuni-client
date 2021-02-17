@@ -163,8 +163,8 @@ export class GeolocalizarComponent implements OnInit {
         marcador.addTo(this.map);
         circulo.addTo(this.map);
         
-        this.loading = false;
       }); 
+      this.loading = false;
     });
   }  
   
