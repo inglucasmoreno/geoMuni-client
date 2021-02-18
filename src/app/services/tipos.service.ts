@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Tipo } from '../models/tipo,model';
 
 const baseUrl = environment.base_url;
 
@@ -11,7 +12,16 @@ const baseUrl = environment.base_url;
 export class TiposService {
   
   constructor(private http: HttpClient) { }
-  
+
+  // Nuevo tipo
+  nuevoTipo(data: any): Observable<any> {
+    return this.http.post(`${baseUrl}/tipos`, data, {
+      headers: {
+        'x-token': localStorage.getItem('token')
+      }
+    })
+  }
+
   // Listar tipos
   listarTipos(activo = null): Observable<any> {
 
@@ -22,5 +32,13 @@ export class TiposService {
       headers: { 'x-token': localStorage.getItem('token') }
     });
   }
-  
+
+  // Actualizar eventos
+  actualizarEventos(id: string, data: any): Observable<any> {
+    return this.http.put(`${baseUrl}/tipos/${id}`, data, { 
+      headers: {
+        'x-token': localStorage.getItem('token')  
+      }});
+  }
+
 }

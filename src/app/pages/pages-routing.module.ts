@@ -13,6 +13,7 @@ import { EditarPasswordComponent } from './usuarios/editar/editar-password.compo
 import { AdminGuard } from '../guards/admin.guard';
 import { EventoComponent } from './eventos/evento.component';
 import { EditarEventoComponent } from './eventos/editar/editar-evento/editar-evento.component';
+import { TiposComponent } from './tipos/tipos.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,7 @@ const routes: Routes = [
       { path: 'usuarios/nuevo', canActivate: [AuthGuard, AdminGuard] ,component: NuevoUsuarioComponent },
       { path: 'usuarios/editar/:id', canActivate: [AuthGuard, AdminGuard] ,component: EditarUsuarioComponent },
       { path: 'usuarios/password/:id', canActivate: [AuthGuard, AdminGuard] ,component: EditarPasswordComponent },
+      { path: 'tipos', canActivate: [AuthGuard, AdminGuard] ,component: TiposComponent },
     ]
   }
 ];

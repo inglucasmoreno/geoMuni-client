@@ -17,11 +17,12 @@ import { EditarPasswordComponent } from './usuarios/editar/editar-password.compo
 import { PipesModule } from '../pipes/pipes.module';
 import { EventoComponent } from './eventos/evento.component';
 import { EditarEventoComponent } from './eventos/editar/editar-evento/editar-evento.component';
+import { TiposComponent } from './tipos/tipos.component';
 
 @NgModule({
   declarations: [
     HomeComponent, 
-    PagesComponent, GeolocalizarComponent, UsuariosComponent, EventosComponent, NuevoUsuarioComponent, EditarUsuarioComponent, EditarPasswordComponent, EventoComponent, EditarEventoComponent,
+    PagesComponent, GeolocalizarComponent, UsuariosComponent, EventosComponent, NuevoUsuarioComponent, EditarUsuarioComponent, EditarPasswordComponent, EventoComponent, EditarEventoComponent, TiposComponent,
   ],
   imports: [
     CommonModule,
