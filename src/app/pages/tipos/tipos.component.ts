@@ -15,6 +15,12 @@ export class TiposComponent implements OnInit {
   public total = 0;
   public tipos: Tipo[];
 
+  // Filtrado
+  public filtrado = { activo: true, descripcion: '' };
+
+  // Paginacion
+  public paginacion = { limit: 5, desde: 0, hasta: 5 };
+
   constructor(private tiposService: TiposService) { }
 
   ngOnInit(): void { 
@@ -23,7 +29,12 @@ export class TiposComponent implements OnInit {
 
   actualizarLista(): void {
     this.loading = true;
-    this.tiposService.listarTipos().subscribe( ({ tipos, total }) => {
+    this.tiposService.listarTipos(
+      this.filtrado.activo, 
+      this.filtrado.descripcion, 
+      this.paginacion.desde,
+      this.paginacion.hasta
+    ).subscribe( ({ tipos, total }) => {
       this.total = total;
       this.tipos = tipos;
       this.loading = false;
@@ -71,7 +82,7 @@ export class TiposComponent implements OnInit {
       confirmButtonText: 'Actualizar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
-      this.tiposService.actualizarEventos(tipo._id, { activo: !tipo.activo }).subscribe( () => {
+      this.tiposService.actualizarTipo(tipo._id, { activo: !tipo.activo }).subscribe( () => {
         if (result.isConfirmed) {
           this.loading = true;
           Swal.fire({
@@ -85,6 +96,40 @@ export class TiposComponent implements OnInit {
         }
       });
     })
+  }
+
+  // Actualizar paginacion
+  actualizarDesdeHasta(selector): void {
+
+    this.loading = true;
+
+    if (selector === 'siguiente'){ // Incrementar
+      if (this.paginacion.hasta < this.total){
+        this.paginacion.desde += this.paginacion.limit;
+        this.paginacion.hasta += this.paginacion.limit;
+      }
+    }else{                         // Decrementar
+      this.paginacion.desde -= this.paginacion.limit;
+      if (this.paginacion.desde < 0){
+        this.paginacion.desde = 0;
+      }else{
+        this.paginacion.hasta -= this.paginacion.limit;
+      }
+    }
+    this.actualizarLista();
+  }
+
+
+  filtroActivo(activo: boolean): void {
+    this.loading = true;
+    this.filtrado.activo = activo;
+    this.actualizarLista();
+  }
+
+  filtroDescripcion(descripcion: string): void {
+    this.loading = true;
+    this.filtrado.descripcion = descripcion;
+    this.actualizarLista();
   }
 
 }

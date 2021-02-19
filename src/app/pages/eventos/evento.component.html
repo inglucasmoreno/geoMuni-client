@@ -11,7 +11,7 @@
             </div>
         </div>
         <app-boton-tabla
-            *ngIf="!loading && usuarioLogin.role === 'ADMIN_ROLE'" 
+            *ngIf="!loading && usuarioLogin.role === 'ADMIN_ROLE' && evento.activo" 
             ruta='dashboard/eventos/editar'
             titulo="Editar evento"
             icono="fas fa-pencil-alt"

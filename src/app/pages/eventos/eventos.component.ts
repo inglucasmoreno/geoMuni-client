@@ -18,6 +18,7 @@ export class EventosComponent implements OnInit {
   public total: 0;
   public descripcion = '';
   public tipo = '';
+  public activo = true;
 
   // Paginacion
   public paginacion = { limit: 10, desde: 0, hasta: 10 }
@@ -40,7 +41,7 @@ export class EventosComponent implements OnInit {
   // Listar eventos
   listarEventos(): void {
     this.loading = true;
-    this.eventosServices.listarEventos(true, this.paginacion.desde, this.paginacion.hasta, this.descripcion, this.tipo).subscribe( ({eventos, total}) => {
+    this.eventosServices.listarEventos(this.activo, this.paginacion.desde, this.paginacion.hasta, this.descripcion, this.tipo).subscribe( ({eventos, total}) => {
       this.total = total;
       this.eventos = eventos;
       this.loading = false;
@@ -104,11 +105,18 @@ export class EventosComponent implements OnInit {
     this.listarEventos();
   }
 
-    // Filtrado por tipo
-    filtrarTipo(txtTipo: string): void {
-      this.loading = true;
-      this.tipo = txtTipo;
-      this.listarEventos();
-    }
+  // Filtrado por completada/No completada
+  filtroActivo(activo: any): void {
+    this.loading = true;
+    this.activo = activo;
+    this.listarEventos();
+  }
+
+  // Filtrado por tipo
+  filtrarTipo(txtTipo: string): void {
+    this.loading = true;
+    this.tipo = txtTipo;
+    this.listarEventos();
+  }
 
 }

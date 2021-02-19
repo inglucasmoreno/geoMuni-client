@@ -13,6 +13,14 @@ export class TiposService {
   
   constructor(private http: HttpClient) { }
 
+
+  // Tipo por ID
+  getTipo(id: string): Observable<any>{
+    return this.http.get(`${baseUrl}/tipos/${id}`,{
+      headers:{'x-token': localStorage.getItem('token')}
+    })
+  }
+
   // Nuevo tipo
   nuevoTipo(data: any): Observable<any> {
     return this.http.post(`${baseUrl}/tipos`, data, {
@@ -23,18 +31,20 @@ export class TiposService {
   }
 
   // Listar tipos
-  listarTipos(activo = null): Observable<any> {
-
+  listarTipos(activo = null, descripcion = '' , desde = 0, limit = 0): Observable<any> {
     return this.http.get(`${baseUrl}/tipos`, { 
       params: { 
-        activo: activo ? activo : ''
+        activo: activo ? activo : '',
+        desde: String(desde),
+        limit: String(limit),
+        descripcion
       }, 
       headers: { 'x-token': localStorage.getItem('token') }
     });
   }
 
   // Actualizar eventos
-  actualizarEventos(id: string, data: any): Observable<any> {
+  actualizarTipo(id: string, data: any): Observable<any> {
     return this.http.put(`${baseUrl}/tipos/${id}`, data, { 
       headers: {
         'x-token': localStorage.getItem('token')  

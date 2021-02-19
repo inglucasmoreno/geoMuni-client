@@ -28,6 +28,24 @@
                     </div>
                 </div>
             </div>
+            <div class="flex flex-row mb-1 sm:mb-0">
+                <div class="relative">
+                    <select
+                        #txtActivo
+                        (change)="filtroActivo(txtActivo.value)"    
+                        class="appearance-none h-full rounded-r border-t sm:rounded-r-none border-l sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500"
+                    >
+                        <option value=true> No completadas </option>
+                        <option value=false> Completadas </option>
+                        <option value=""> Todas </option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
             <div class="block relative">
                 <span class="h-full absolute inset-y-0 left-0 flex items-center pl-2">
                     <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current text-gray-500">
@@ -62,19 +80,19 @@
                         </tr>
                     </thead>
                     <tbody *ngIf="!loading">
-                        <tr *ngFor="let evento of eventos">
-                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        <tr *ngFor="let evento of eventos" [ngClass]="{'bg-green-100': !evento.activo, 'bg-white': evento.activo}">
+                            <td class="px-5 py-5 border-b border-gray-200  text-sm">
                                 <p class="text-gray-900 whitespace-no-wrap"> {{ evento.tipo['descripcion'] }} </p>
                             </td>
-                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <td class="px-5 py-5 border-b border-gray-200 text-sm">
                                 <p class="text-gray-900 whitespace-no-wrap"> {{ evento.descripcion }} </p>
                             </td>
-                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <td class="px-5 py-5 border-b border-gray-200 text-sm">
                                 <p class="text-gray-900 whitespace-no-wrap">
                                     {{ evento.createdAt | fecha}}
                                 </p>
                             </td>
-                            <td class="px-5 text-center py-5 border-b border-gray-200 bg-white text-sm">
+                            <td class="px-5 text-center py-5 border-b border-gray-200 text-sm">
                                 <div class="text-center">
                                     <div class="flex items-center justify-center">  
                                         <app-boton-tabla 
@@ -84,7 +102,8 @@
                                             [id]="evento._id" 
                                         >
                                         </app-boton-tabla>
-                                        <app-boton-tabla 
+                                        <app-boton-tabla
+                                            *ngIf="evento.activo" 
                                             titulo="Completar evento"
                                             icono="far fa-thumbs-up" 
                                             (click)="completarEvento(evento._id)"

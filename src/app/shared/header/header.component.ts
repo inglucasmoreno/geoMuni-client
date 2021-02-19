@@ -10,6 +10,7 @@ import { AuthService } from '../../services/auth.service';
 export class HeaderComponent implements OnInit {
 
   public showMenu = true;
+  public openAdmin = true;
   public usuarioLogin;
 
   constructor( private authService: AuthService ) { }
@@ -17,6 +18,8 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.usuarioLogin = this.authService.usuario;
   }
+
+
 
   logout(): void{
     this.authService.logout();
