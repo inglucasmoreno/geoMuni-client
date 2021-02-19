@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Tipo } from 'src/app/models/tipo,model';
+import { Tipo } from 'src/app/models/tipo.model';
 import { TiposService } from 'src/app/services/tipos.service';
 import Swal from 'sweetalert2';
 

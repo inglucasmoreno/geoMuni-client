@@ -4,6 +4,7 @@ export class Evento {
         public lat: string,
         public lng: string,
         public tipo: any,
+        public subtipo?: any,
         public _id?: string,
         public fotoUrl?: string,
         public activo?: string,

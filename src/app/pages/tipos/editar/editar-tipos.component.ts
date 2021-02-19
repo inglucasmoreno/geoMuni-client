@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Tipo } from 'src/app/models/tipo,model';
+import { Tipo } from 'src/app/models/tipo.model';
 import Swal from 'sweetalert2';
 import { TiposService } from '../../../services/tipos.service';
 

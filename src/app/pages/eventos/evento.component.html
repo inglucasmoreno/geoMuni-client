@@ -29,7 +29,14 @@
                 <div *ngIf="loading" class="text-gray-500 p-1 text-sm text-center">
                     <i class="fas fa-spinner animate-spin"></i> Cargando tipo
                 </div>
-            </div>   
+            </div>
+            <div class="border shadow mt-2">
+                <h1 class="bg-blue-500 text-white p-1 rounded-t text-center text-sm font-semibold"> Subtipo de evento </h1>
+                <div *ngIf="!loading" class="p-1 text-center font-semibold text-sm"> {{ evento.subtipo ? evento.subtipo['descripcion'] : '----------' }} </div>
+                <div *ngIf="loading" class="text-gray-500 p-1 text-sm text-center">
+                    <i class="fas fa-spinner animate-spin"></i> Cargando subtipo
+                </div>
+            </div>    
             <div class="border shadow mt-2">
                 <h1 class="bg-blue-500 text-white p-1 rounded-t text-center text-sm font-semibold"> Fecha de creación </h1>
                 <div *ngIf="!loading" class="p-1 text-center text-sm"> {{ evento.createdAt | fecha }} </div>

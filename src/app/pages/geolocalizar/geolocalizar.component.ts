@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵɵtrustConstantResourceUrl } from '@angular/core';
 import Swal from 'sweetalert2';
 import * as L from 'leaflet';
 import { Usuario } from 'src/app/models/usuario.model';
@@ -7,6 +7,7 @@ import { TiposService } from '../../services/tipos.service';
 import { EventosService } from '../../services/eventos.service';
 import { Evento } from 'src/app/models/evento.model';
 import * as moment from 'moment';
+import { SubtiposService } from 'src/app/services/subtipos.service';
 
 @Component({
   selector: 'app-geolocalizar',
@@ -20,10 +21,12 @@ export class GeolocalizarComponent implements OnInit {
   public map;
   public usuarioLogin: Usuario;
   public tipos = {};
+  public subtipos = {};
   
   constructor(private auhtService: AuthService,
               private tiposServices: TiposService,
-              private eventoService: EventosService) { }
+              private eventoService: EventosService,
+              private subtipoService: SubtiposService) { }
 
   ngOnInit(): void {
     this.usuarioLogin = this.auhtService.usuario;
@@ -61,6 +64,7 @@ export class GeolocalizarComponent implements OnInit {
     // Accion: Click sobre el mapa
     this.map.on('click', async (e) => { 
       if(this.usuarioLogin.role === 'ADMIN_ROLE'){  // Usuario administrador
+        
         const { value: tipo } = await Swal.fire({
           title: 'Tipo de evento',
           input: 'select',
@@ -70,7 +74,55 @@ export class GeolocalizarComponent implements OnInit {
           cancelButtonText: 'Cancelar'
         });
 
-        if(tipo) {
+        if(tipo){
+
+          this.subtipoService.listarSubtipos(tipo).subscribe( async ({subtipos}) => {
+            if(subtipos.length != 0){
+              subtipos.map(subtipo => {this.subtipos[subtipo._id] = subtipo.descripcion})  
+              const { value: subtipo } = await Swal.fire({
+                title: 'Subtipo de evento',
+                input: 'select',
+                inputOptions: this.subtipos,
+                showCancelButton: true,
+                confirmButtonText: 'Seleccionar',
+                cancelButtonText: 'Cancelar'
+              });
+              
+              if(subtipo){
+                const { value: descripcion } = await Swal.fire({
+                  title: 'Descripción del evento',
+                  input: 'text',
+                  inputPlaceholder: 'Descripción',
+                  showCancelButton: true,
+                  confirmButtonText: 'Entendido',
+                  cancelButtonText: 'Cancelar'
+                })
+              
+                if(subtipo && descripcion){
+           
+                  // Creando evento         
+                  const dataEvento: Evento = {
+                    descripcion,
+                    tipo: tipo,
+                    subtipo: subtipo,
+                    lat: e.latlng.lat.toString(),
+                    lng: e.latlng.lng.toString(),
+                  }
+  
+                  this.eventoService.nuevoEvento(dataEvento).subscribe( () => {
+                    this.actualizarMapa();
+                    Swal.fire({
+                      icon: 'success',
+                      title: 'Completado',
+                      text: 'Evento creado correctamente',
+                      confirmButtonText: 'Entendido'
+                    });
+                  });
+                }
+              }
+            }          
+          });
+          
           const { value: descripcion } = await Swal.fire({
             title: 'Descripción del evento',
             input: 'text',
@@ -101,6 +153,8 @@ export class GeolocalizarComponent implements OnInit {
             });
              
           }
+
+
         }
       }
     });
@@ -134,24 +188,26 @@ export class GeolocalizarComponent implements OnInit {
         const marcador = L.marker([Number(evento.lat), Number(evento.lng)],{icon}).bindPopup(`
           <div class="rounded p-3">  
           <div class="broder shadow rounded mt-2">
-          <h1 class="bg-blue-500 text-white font-semibold p-1 rounded-t text-center"> Tipo de evento </h1> 
-          <div class="text-center font-semibold p-1 text-gray-700">
-            <span> ${evento.tipo['descripcion']} </span> 
-          </div>
+            <h1 class="bg-blue-500 text-white font-semibold p-1 rounded-t text-center"> Tipo de evento </h1> 
+              <div class="text-center font-semibold p-1 text-gray-700">
+                <span> ${evento.tipo['descripcion']} </span> 
+              </div>
             </div>
-            
+                        
             <div class="broder shadow rounded mt-2">
               <h1 class="bg-blue-500 text-white font-semibold p-1 rounded-t text-center"> Fecha de creación </h1> 
               <div class="text-center font-semibold p-1 text-gray-700">
                 <span> ${moment(evento.createdAt).format('DD-MM-YYYY')} </span> 
               </div>
             </div>
+
             <div class="mt-2 border shadow rounded text-center">
               <h2 class="font-semibold bg-blue-500 rounded-t text-white py-1 px-2"> Descripción del evento </h2> 
               <div class="p-2 rounded">
                 <span> ${evento.descripcion ? evento.descripcion : 'Sin descripción'} </span>  
               </div>
             </div>
+            
             <button 
               onclick="location.href='dashboard/eventos/ver/${evento._id}'"  
               class="p-2 shadow bg-gray-600 text-white mt-2 w-full rounded font-semibold"> 

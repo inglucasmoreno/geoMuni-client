@@ -6,7 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { EventosService } from 'src/app/services/eventos.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TiposService } from '../../../../services/tipos.service';
-import { Tipo } from '../../../../models/tipo,model';
+import { Tipo } from '../../../../models/tipo.model';
 import Swal from 'sweetalert2';
 import { marker } from 'leaflet';
 

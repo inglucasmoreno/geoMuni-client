@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TiposService } from '../../services/tipos.service';
 import Swal from 'sweetalert2';
-import { Tipo } from '../../models/tipo,model';
+import { Tipo } from '../../models/tipo.model';
 import { EventosService } from '../../services/eventos.service';
 
 @Component({
