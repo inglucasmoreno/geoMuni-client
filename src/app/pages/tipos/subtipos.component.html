@@ -1,32 +1,39 @@
 <app-tarjeta width="w-11/12 md:w-1/2 xl:w-1/4">
-    <div class="flex items-center justify-between md:ml-4 rounded-top text-gray-600 px-3 mt-2 text-2xl font-hairline">
-        <div class="flex items-center">
-            <i class="fas fa-list-alt mr-2"></i>
-            <span class="ml-1"> Tipos de eventos </span>
+    <div class="flex items-center bg-gray-100 text-gray-600 font-hairline p-3 text-xl">
+        <app-boton-volver ruta="/dashboard/tipos"></app-boton-volver>
+        <div>
+            <div *ngIf="loading" class="text-gray-500 text-center">
+                <i class="fas fa-spinner animate-spin"></i> Cargando tipo
+            </div>
+            <h1 *ngIf="!loading" class="ml-1"> {{ tipo ? tipo.descripcion : null }} </h1>
+            <app-pastilla
+                texto="Agregando subtipo"
+                icono="fas fa-list-alt">
+            </app-pastilla>
         </div>
     </div>
     <div class="p-5">
-        <h1 class="text-gray-600 font-semibold"> Nuevo tipo </h1>
+        <h1 class="text-gray-600 font-semibold"> Nuevo subtipo </h1>
         <input class="w-full rounded shadow border p-1 mt-2" 
-               #txtTipo
+               #txtSubtipo
                placeholder="Descripción" 
                type="text">
         <button class="mt-3 border shadow rounded bg-blue-500 text-white w-full p-1"
-                (click)="nuevoTipo(txtTipo)"> Crear </button>
+                (click)="nuevoSubtipo(txtSubtipo)"> Crear </button>
     </div>
 </app-tarjeta>
 
 <app-tarjeta>
     <div class="flex items-center justify-between md:ml-4 rounded-top text-gray-600 px-3 mt-2 text-2xl font-hairline">
         <div class="flex items-center">
-            <span class="ml-1"> Listado de tipos </span>
+            <span class="ml-1"> Listado de subtipos</span>
         </div>
     </div>
     <div class="antialiased font-sans bg-gray-100 shadow">
         <div class="container mx-auto px-4 sm:px-8">
             <div class="py-2">
                 <div>
-                    <h2 class="text-2xl text-gray-700 font-semibold leading-tight"> Tipos ({{ total }}) </h2>
+                    <h2 class="text-2xl text-gray-700 font-semibold leading-tight"> Subtipos ({{ total }}) </h2>
                 </div> <div class="my-2 flex sm:flex-row flex-col">
                     <div class="flex flex-row mb-1 sm:mb-0">
                         <div class="relative">
@@ -80,32 +87,25 @@
                                 </tr>
                             </thead>
                             <tbody *ngIf="!loading">
-                                <tr class="animate__animated animate__fadeIn" *ngFor="let tipo of tipos">
+                                <tr class="animate__animated animate__fadeIn" *ngFor="let subtipo of subtipos">
                                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap">
-                                            {{ tipo.descripcion }}
+                                            {{ subtipo.descripcion }}
                                         </p>
                                     </td>
                                     <td class="px-5 py-5 text-center border-b border-gray-200 bg-white text-sm">
-                                        <app-boton-estado [activo]="tipo.activo" (click)="actualizarEstado(tipo)"></app-boton-estado>
+                                        <app-boton-estado (click)="actualizarEstado(subtipo)" [activo]="subtipo.activo"></app-boton-estado>
                                     </td>
                                     <td class="px-5 text-center py-5 border-b border-gray-200 bg-white text-sm">
                                         <div class="text-center">
                                             <div class="flex items-center justify-center">  
                                                 <app-boton-tabla 
-                                                ruta='/dashboard/tipos/subtipos'
-                                                titulo="Subtipos"
-                                                icono="fas fa-list-ul"
-                                                [id]="tipo._id" 
-                                                >
-                                            </app-boton-tabla>
-                                            <app-boton-tabla 
-                                                ruta='/dashboard/tipos/editar'
-                                                titulo="Editar tipo"
-                                                icono="fas fa-pencil-alt"
-                                                [id]="tipo._id" 
-                                                >
-                                            </app-boton-tabla>
+                                                    ruta='/dashboard/tipos/editar-subtipos'
+                                                    titulo="Editar tipo"
+                                                    icono="fas fa-pencil-alt"
+                                                    [id]="subtipo._id" 
+                                                    >
+                                                </app-boton-tabla>
                                             </div>
                                         </div>
                                     </td>

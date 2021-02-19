@@ -15,6 +15,8 @@ import { EventoComponent } from './eventos/evento.component';
 import { EditarEventoComponent } from './eventos/editar/editar-evento/editar-evento.component';
 import { TiposComponent } from './tipos/tipos.component';
 import { EditarTiposComponent } from './tipos/editar/editar-tipos.component';
+import { SubtiposComponent } from './tipos/subtipos.component';
+import { EditarSubtiposComponent } from './tipos/editar/editar-subtipos.component';
 
 const routes: Routes = [
   {
@@ -33,6 +35,8 @@ const routes: Routes = [
       { path: 'usuarios/password/:id', canActivate: [AuthGuard, AdminGuard] ,component: EditarPasswordComponent },
       { path: 'tipos', canActivate: [AuthGuard, AdminGuard] ,component: TiposComponent },
       { path: 'tipos/editar/:id', canActivate: [AuthGuard, AdminGuard] ,component: EditarTiposComponent },
+      { path: 'tipos/editar-subtipos/:id', canActivate: [AuthGuard, AdminGuard] ,component: EditarSubtiposComponent },
+      { path: 'tipos/subtipos/:id', canActivate: [AuthGuard, AdminGuard] ,component: SubtiposComponent },
     ]
   }
 ];

@@ -19,11 +19,13 @@ import { EventoComponent } from './eventos/evento.component';
 import { EditarEventoComponent } from './eventos/editar/editar-evento/editar-evento.component';
 import { TiposComponent } from './tipos/tipos.component';
 import { EditarTiposComponent } from './tipos/editar/editar-tipos.component';
+import { SubtiposComponent } from './tipos/subtipos.component';
+import { EditarSubtiposComponent } from './tipos/editar/editar-subtipos.component';
 
 @NgModule({
   declarations: [
     HomeComponent, 
-    PagesComponent, GeolocalizarComponent, UsuariosComponent, EventosComponent, NuevoUsuarioComponent, EditarUsuarioComponent, EditarPasswordComponent, EventoComponent, EditarEventoComponent, TiposComponent, EditarTiposComponent,
+    PagesComponent, GeolocalizarComponent, UsuariosComponent, EventosComponent, NuevoUsuarioComponent, EditarUsuarioComponent, EditarPasswordComponent, EventoComponent, EditarEventoComponent, TiposComponent, EditarTiposComponent, SubtiposComponent, EditarSubtiposComponent,
   ],
   imports: [
     CommonModule,

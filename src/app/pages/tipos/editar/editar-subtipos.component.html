@@ -1,0 +1,35 @@
+<app-tarjeta width="w-11/12 md:w-1/2 xl:w-1/4">
+    <div class="flex items-center bg-gray-100 text-gray-600 font-hairline p-3 text-xl">
+        <app-boton-volver ruta="/dashboard/tipos"></app-boton-volver>
+        <div>
+            <h1 class="ml-1"> Tipos </h1>
+            <app-pastilla
+                texto="Editando tipo"
+                icono="fas fa-pencil-alt">
+            </app-pastilla>
+        </div>
+    </div>
+    <div class="bg-gray-100">
+        <form class="p-4"
+              [formGroup]="formSubtipo">
+            <div>
+                <label for="descripcion" class="font-semibold"> Descripción </label>
+                <input  type="text" 
+                        id="descripcion" 
+                        class="w-full mt-2 rounded p-1 border shadow" 
+                        placeholder="Descripción del tipo"
+                        formControlName="descripcion"
+                        >
+            </div>
+            <div class="mt-3">
+                <label for="descripcion" class="font-semibold"> Estado </label>
+                <select class="w-full p-1 rounded shadow border mt-2"
+                        formControlName="activo">
+                    <option value=true> Activo </option>
+                    <option value=false> Inactivo </option>
+                </select>
+            </div>
+            <button (click)="actualizarSubtipo()" class="w-full p-1 mt-3 border shadow rounded bg-blue-500 text-white text-center"> Actualizar </button>
+        </form>
+    </div>
+</app-tarjeta>

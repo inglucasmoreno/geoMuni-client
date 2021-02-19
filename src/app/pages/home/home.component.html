@@ -17,4 +17,11 @@
         titulo="Usuarios"
         ruta="dashboard/usuarios"
     ></app-boton-home>
+
+    <app-boton-home
+        *ngIf="usuario.role === 'ADMIN_ROLE'"
+        icono="fas fa-list-alt"
+        titulo="Tipos"
+        ruta="dashboard/tipos"
+    ></app-boton-home>
 </div>
