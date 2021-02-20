@@ -21,6 +21,7 @@ export class GeolocalizarComponent implements OnInit {
   public map;
   public usuarioLogin: Usuario;
   public tipos = {};
+  public tipos_arr = [];
   public subtipos = {};
   
   constructor(private auhtService: AuthService,
@@ -37,6 +38,7 @@ export class GeolocalizarComponent implements OnInit {
 
   listarTipos(): void {
     this.tiposServices.listarTipos(true).subscribe( ({ tipos }) => {
+      this.tipos_arr = tipos;
       tipos.map( tipo => this.tipos[tipo._id] = tipo.descripcion )
     });
   }
@@ -65,96 +67,104 @@ export class GeolocalizarComponent implements OnInit {
     this.map.on('click', async (e) => { 
       if(this.usuarioLogin.role === 'ADMIN_ROLE'){  // Usuario administrador
         
-        const { value: tipo } = await Swal.fire({
-          title: 'Tipo de evento',
-          input: 'select',
-          inputOptions: this.tipos,
-          showCancelButton: true,
-          confirmButtonText: 'Seleccionar',
-          cancelButtonText: 'Cancelar'
-        });
+        if(this.tipos_arr.length != 0) {
 
-        if(tipo){
-
-          this.subtipoService.listarSubtipos(tipo).subscribe( async ({subtipos}) => {
-            if(subtipos.length != 0){
-              subtipos.map(subtipo => {this.subtipos[subtipo._id] = subtipo.descripcion})  
-              const { value: subtipo } = await Swal.fire({
-                title: 'Subtipo de evento',
-                input: 'select',
-                inputOptions: this.subtipos,
-                showCancelButton: true,
-                confirmButtonText: 'Seleccionar',
-                cancelButtonText: 'Cancelar'
-              });
-              
-              if(subtipo){
-                const { value: descripcion } = await Swal.fire({
-                  title: 'Descripción del evento',
-                  input: 'text',
-                  inputPlaceholder: 'Descripción',
-                  showCancelButton: true,
-                  confirmButtonText: 'Entendido',
-                  cancelButtonText: 'Cancelar'
-                })
-              
-                if(subtipo && descripcion){
-           
-                  // Creando evento         
-                  const dataEvento: Evento = {
-                    descripcion,
-                    tipo: tipo,
-                    subtipo: subtipo,
-                    lat: e.latlng.lat.toString(),
-                    lng: e.latlng.lng.toString(),
-                  }
-  
-                  this.eventoService.nuevoEvento(dataEvento).subscribe( () => {
-                    this.actualizarMapa();
-                    Swal.fire({
-                      icon: 'success',
-                      title: 'Completado',
-                      text: 'Evento creado correctamente',
-                      confirmButtonText: 'Entendido'
-                    });
-                  });
-                }
-              }
-            }          
-          });
-          
-          const { value: descripcion } = await Swal.fire({
-            title: 'Descripción del evento',
-            input: 'text',
-            inputPlaceholder: 'Descripción',
+          const { value: tipo } = await Swal.fire({
+            title: 'Tipo de evento',
+            input: 'select',
+            inputOptions: this.tipos,
             showCancelButton: true,
-            confirmButtonText: 'Entendido',
+            confirmButtonText: 'Seleccionar',
             cancelButtonText: 'Cancelar'
-          })
-          
-          if(tipo && descripcion){
-         
-            // Creando evento         
-            const dataEvento: Evento = {
-              descripcion,
-              tipo: tipo,
-              lat: e.latlng.lat.toString(),
-              lng: e.latlng.lng.toString(),
-            }
-
-            this.eventoService.nuevoEvento(dataEvento).subscribe( () => {
-              this.actualizarMapa();
-              Swal.fire({
-                icon: 'success',
-                title: 'Completado',
-                text: 'Evento creado correctamente',
-                confirmButtonText: 'Entendido'
-              });
-            });
+          });
+  
+          if(tipo){
+  
+            this.subtipoService.listarSubtipos(tipo, true).subscribe( async ({subtipos}) => {
+              this.subtipos = {};
+              if(subtipos.length != 0){
+                subtipos.map(subtipo => {this.subtipos[subtipo._id] = subtipo.descripcion})  
+                const { value: subtipo } = await Swal.fire({
+                  title: 'Subtipo de evento',
+                  input: 'select',
+                  inputOptions: this.subtipos,
+                  showCancelButton: true,
+                  confirmButtonText: 'Seleccionar',
+                  cancelButtonText: 'Cancelar'
+                });
+                
+                if(subtipo){
+                  const { value: descripcion } = await Swal.fire({
+                    title: 'Descripción del evento',
+                    input: 'text',
+                    inputPlaceholder: 'Descripción',
+                    showCancelButton: true,
+                    confirmButtonText: 'Entendido',
+                    cancelButtonText: 'Cancelar'
+                  })
+                
+                  if(subtipo && descripcion){
              
-          }
-
-
+                    // Creando evento         
+                    const dataEvento: Evento = {
+                      descripcion,
+                      tipo: tipo,
+                      subtipo: subtipo,
+                      lat: e.latlng.lat.toString(),
+                      lng: e.latlng.lng.toString(),
+                    }
+    
+                    this.eventoService.nuevoEvento(dataEvento).subscribe( () => {
+                      this.actualizarMapa();
+                      Swal.fire({
+                        icon: 'success',
+                        title: 'Completado',
+                        text: 'Evento creado correctamente',
+                        confirmButtonText: 'Entendido'
+                      });
+                    });
+                  }
+                }
+              }          
+            });
+            
+            const { value: descripcion } = await Swal.fire({
+              title: 'Descripción del evento',
+              input: 'text',
+              inputPlaceholder: 'Descripción',
+              showCancelButton: true,
+              confirmButtonText: 'Entendido',
+              cancelButtonText: 'Cancelar'
+            })
+            
+            if(tipo && descripcion){
+           
+              // Creando evento         
+              const dataEvento: Evento = {
+                descripcion,
+                tipo: tipo,
+                lat: e.latlng.lat.toString(),
+                lng: e.latlng.lng.toString(),
+              }
+  
+              this.eventoService.nuevoEvento(dataEvento).subscribe( () => {
+                this.actualizarMapa();
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Completado',
+                  text: 'Evento creado correctamente',
+                  confirmButtonText: 'Entendido'
+                });
+              });             
+            }
+          }         
+        }else{
+          Swal.fire({
+            icon: 'info',
+            title: 'Información',
+            text: 'Debe agregar al menos un tipo',
+            confirmButtonText: 'Entendido'
+          })
         }
       }
     });

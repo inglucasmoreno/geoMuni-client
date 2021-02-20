@@ -82,8 +82,8 @@ export class TiposComponent implements OnInit {
       confirmButtonText: 'Actualizar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
-      this.tiposService.actualizarTipo(tipo._id, { activo: !tipo.activo }).subscribe( () => {
-        if (result.isConfirmed) {
+      if(result.isConfirmed){
+        this.tiposService.actualizarTipo(tipo._id, { activo: !tipo.activo }).subscribe( () => {   
           this.loading = true;
           Swal.fire({
             icon: 'success',
@@ -93,8 +93,15 @@ export class TiposComponent implements OnInit {
             timer: 1000
           })
           this.actualizarLista();
-        }
-      });
+        },({error}) => {
+          Swal.fire({
+            icon: 'info',
+            title: 'Información',
+            text: error.msg,
+            confirmButtonText: 'Entendido'
+          });
+        });
+      }
     })
   }
 

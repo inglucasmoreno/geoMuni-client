@@ -126,19 +126,26 @@ export class SubtiposComponent implements OnInit {
       confirmButtonText: 'Actualizar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
-      this.subtiposService.actualizarSubtipo(subtipo._id, {tipo: this.idTipo, activo: !subtipo.activo}).subscribe( () => {
-        if (result.isConfirmed) {
-          this.loading = true;
+      if(result.isConfirmed){
+        this.subtiposService.actualizarSubtipo(subtipo._id, {tipo: this.idTipo, activo: !subtipo.activo}).subscribe( () => {
+            this.loading = true;
+            Swal.fire({
+              icon: 'success',
+              title: 'Completado',
+              text: 'El tipo ha sido actualizado',
+              showConfirmButton: false,
+              timer: 1000
+            })
+            this.listarSubtipos();
+        },({error}) => {
           Swal.fire({
-            icon: 'success',
-            title: 'Completado',
-            text: 'El tipo ha sido actualizado',
-            showConfirmButton: false,
-            timer: 1000
-          })
-          this.listarSubtipos();
-        }
-      });
+            icon: 'info',
+            title: 'Información',
+            text: error.msg,
+            confirmButtonText: 'Entendido'
+          });
+        });
+      }
     })
   }
 

@@ -8,7 +8,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { TiposService } from '../../../../services/tipos.service';
 import { Tipo } from '../../../../models/tipo.model';
 import Swal from 'sweetalert2';
-import { marker } from 'leaflet';
+import { SubtiposService } from '../../../../services/subtipos.service';
 
 @Component({
   selector: 'app-editar-evento',
@@ -22,18 +22,21 @@ export class EditarEventoComponent implements OnInit {
   public loading = true;
   public usuarioLogin: Usuario;
   public tipos: Tipo[];
+  public subtipos = [];
 
   public eventoForm = this.fb.group({
     descripcion: ['', Validators.required],
     tipo: ['', Validators.required],
+    subtipo: ['', Validators.required]
   });
 
   constructor(private activatedRoute: ActivatedRoute,
-              private tiposService: TiposService, 
+              private tiposService: TiposService,
+              private subtiposService: SubtiposService, 
               private eventosService: EventosService,
               private authService: AuthService,
               private fb: FormBuilder,
-              private router: Router) { }
+              private router: Router) {}
 
   ngOnInit(): void {
     this.usuarioLogin = this.authService.usuario;
@@ -42,7 +45,24 @@ export class EditarEventoComponent implements OnInit {
       this.getEvento(id);
     }) 
   }
-  
+
+  listarSubtipos(idEvento: string): void {
+    this.subtiposService.listarSubtipos(idEvento, true).subscribe( ({subtipos}) => {
+      if(subtipos) this.subtipos = subtipos;
+      this.eventoForm.setValue({
+        descripcion: this.eventoForm.value.descripcion,
+        tipo: this.eventoForm.value.tipo,
+        subtipo: subtipos[0]._id  
+      });
+    })
+  }
+
+  subtiposIniciales(idEvento: string): void {
+    this.subtiposService.listarSubtipos(idEvento, true).subscribe( ({subtipos}) => {
+      if(subtipos) this.subtipos = subtipos;
+    })
+  }
+
   listarTipos(): void {
     this.tiposService.listarTipos().subscribe(({ tipos }) => {
       this.tipos = tipos;
@@ -60,8 +80,10 @@ export class EditarEventoComponent implements OnInit {
   valoresIniciales(evento: Evento): void {
     this.eventoForm.setValue({
       descripcion: evento.descripcion,
-      tipo: evento.tipo['_id']    
+      tipo: evento.tipo['_id'],
+      subtipo: evento.subtipo ? evento.subtipo._id : ''   
     });
+    this.subtiposIniciales(evento.tipo._id);
   }
 
   actualizarEvento(): void{

@@ -27,6 +27,8 @@
             <div class="border shadow">
                 <h1 class="bg-blue-500 text-white p-1 rounded-t text-center text-sm font-semibold"> Tipo de evento </h1>
                 <select *ngIf="!loading" 
+                        #txtTipo
+                        (change)="listarSubtipos(txtTipo.value)"
                         formControlName="tipo"
                         class="w-full p-1 text-center text-gray-700 text-sm">
                     <option *ngFor="let tipo of tipos" [value]="tipo._id"> {{ tipo.descripcion }} </option>
@@ -34,7 +36,18 @@
                 <div *ngIf="loading" class="text-gray-500 p-1 text-sm text-center">
                     <i class="fas fa-spinner animate-spin"></i> Cargando tipo
                 </div>
-            </div>   
+            </div>
+            <div class="border shadow mt-2">
+                <h1 class="bg-blue-500 text-white p-1 rounded-t text-center text-sm font-semibold"> Subtipo de evento </h1>
+                <select *ngIf="!loading" 
+                        formControlName="subtipo"
+                        class="w-full p-1 text-center text-gray-700 text-sm">
+                    <option *ngFor="let subtipo of subtipos" [value]="subtipo._id"> {{ subtipo.descripcion }} </option>
+                </select>
+                <div *ngIf="loading" class="text-gray-500 p-1 text-sm text-center">
+                    <i class="fas fa-spinner animate-spin"></i> Cargando subtipo
+                </div>
+            </div>    
             <div class="border shadow mt-2">
                 <h1 class="bg-blue-500 text-white p-1 rounded-t text-center text-sm font-semibold"> Fecha de creación </h1>
                 <div *ngIf="!loading" class="p-1 bg-gray-200 text-center text-sm"> {{ evento.createdAt | fecha }} </div>
