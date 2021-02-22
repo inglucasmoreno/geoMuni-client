@@ -16,6 +16,7 @@ export class EventoComponent implements OnInit {
   public evento: Evento;
   public loading = true;
   public usuarioLogin: Usuario;
+  public imgUrl = '';
 
   constructor(private activatedRoute: ActivatedRoute,
               private eventosService: EventosService,

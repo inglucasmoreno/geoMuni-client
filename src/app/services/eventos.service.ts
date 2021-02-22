@@ -23,7 +23,7 @@ export class EventosService {
   getEvento(id: string): Observable<any> {
     return this.http.get(`${baseUrl}/eventos/${id}`,{
       headers: { 'x-token': localStorage.getItem('token') }
-    })
+    });
   }
 
   // Listar eventos
@@ -43,6 +43,13 @@ export class EventosService {
   // Actualizar evento
   actualizarEvento(id, data): Observable<any> {
     return this.http.put(`${baseUrl}/eventos/${id}`, data, {
+      headers: {'x-token': localStorage.getItem('token')}
+    });
+  }
+
+  // Eliminar evento
+  eliminarEvento(id): Observable<any> {
+    return this.http.delete(`${baseUrl}/eventos/${id}`, {
       headers: {'x-token': localStorage.getItem('token')}
     });
   }

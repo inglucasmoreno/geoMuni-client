@@ -18,8 +18,10 @@
         ></app-boton-tabla>   
     </div>
     <div class="p-4 md:flex justify-between">
-        <div class="w-full md:w-1/2">
-            <img class="mr-auto ml-auto rounded shadow border-t-8 border-blue-500 w-full" src="assets/sin-foto.png" alt="Imagen de evento">
+        <div class="w-full md:w-1/2" *ngIf="!loading">
+            <img class="mr-auto ml-auto rounded shadow border-t-8 border-blue-500 w-full" 
+                 [src]="evento.img | imagen:'eventos'" 
+                 alt="Imagen de evento">
         </div>
         <form class="w-full md:w-1/2 md:ml-2 mt-2 md:mt-0"
               [formGroup]="eventoForm"

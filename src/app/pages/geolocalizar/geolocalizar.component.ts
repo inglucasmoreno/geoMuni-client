@@ -8,6 +8,7 @@ import { EventosService } from '../../services/eventos.service';
 import { Evento } from 'src/app/models/evento.model';
 import * as moment from 'moment';
 import { SubtiposService } from 'src/app/services/subtipos.service';
+import { FileUploadService } from '../../services/file-upload.service';
 
 @Component({
   selector: 'app-geolocalizar',
@@ -23,11 +24,13 @@ export class GeolocalizarComponent implements OnInit {
   public tipos = {};
   public tipos_arr = [];
   public subtipos = {};
-  
+  public imagenSubir: File;
+
   constructor(private auhtService: AuthService,
               private tiposServices: TiposService,
               private eventoService: EventosService,
-              private subtipoService: SubtiposService) { }
+              private subtipoService: SubtiposService,
+              private fileUploadService: FileUploadService) { }
 
   ngOnInit(): void {
     this.usuarioLogin = this.auhtService.usuario;
@@ -66,7 +69,6 @@ export class GeolocalizarComponent implements OnInit {
     // Accion: Click sobre el mapa
     this.map.on('click', async (e) => { 
       if(this.usuarioLogin.role === 'ADMIN_ROLE'){  // Usuario administrador
-        
         if(this.tipos_arr.length != 0) {
 
           const { value: tipo } = await Swal.fire({
@@ -79,9 +81,10 @@ export class GeolocalizarComponent implements OnInit {
           });
   
           if(tipo){
-  
+            // Se listan los subtipos correspondientes a ese tipo
             this.subtipoService.listarSubtipos(tipo, true).subscribe( async ({subtipos}) => {
               this.subtipos = {};
+              // Se verifica que los tipos no esten vacios
               if(subtipos.length != 0){
                 subtipos.map(subtipo => {this.subtipos[subtipo._id] = subtipo.descripcion})  
                 const { value: subtipo } = await Swal.fire({
@@ -93,72 +96,100 @@ export class GeolocalizarComponent implements OnInit {
                   cancelButtonText: 'Cancelar'
                 });
                 
+                // Se verifica si se selecciona un subtipo
                 if(subtipo){
+                  
                   const { value: descripcion } = await Swal.fire({
-                    title: 'Descripción del evento',
+                    title: 'Descripción',
                     input: 'text',
-                    inputPlaceholder: 'Descripción',
+                    inputPlaceholder: 'Descripción del evento',
                     showCancelButton: true,
                     confirmButtonText: 'Entendido',
                     cancelButtonText: 'Cancelar'
                   })
-                
-                  if(subtipo && descripcion){
-             
-                    // Creando evento         
-                    const dataEvento: Evento = {
-                      descripcion,
-                      tipo: tipo,
-                      subtipo: subtipo,
-                      lat: e.latlng.lat.toString(),
-                      lng: e.latlng.lng.toString(),
-                    }
-    
-                    this.eventoService.nuevoEvento(dataEvento).subscribe( () => {
-                      this.actualizarMapa();
+                  
+                  // Se verifica si hay descripcion
+                  if(descripcion){
+
+                    const { value: file } = await Swal.fire({
+                      title: 'Seleccionar imagen',
+                      input: 'file',
+                      inputAttributes: {
+                        'accept': 'image/*',
+                        'aria-label': 'Upload your profile picture'
+                      },
+                      confirmButtonText: 'Subir',
+                      showCancelButton: true,
+                      cancelButtonText: 'Cancelar'
+                    })
+                    
+                    // Se verifica si hay una imagen cargada
+                    if (file) {
+                      const reader = new FileReader()
+                      reader.onload = (e) => { this.imagenSubir = file; }
+                      
+                      // Creando evento         
+                      const dataEvento: Evento = {
+                        descripcion,
+                        tipo: tipo,
+                        subtipo: subtipo,
+                        lat: e.latlng.lat.toString(),
+                        lng: e.latlng.lng.toString(),
+                      }
+                      
+                      // Crear evento y subir foto
+                      this.eventoService.nuevoEvento(dataEvento).subscribe( ({evento}) => {         
+                        const subida = this.fileUploadService.actualizarFoto(file, 'eventos', evento._id)
+                          .then( (resp: any) => {
+                            if(resp.ok){
+                              this.actualizarMapa();                  
+                              Swal.fire({
+                                icon: 'success',
+                                title: 'Completado',
+                                text: 'Evento creado correctamente',
+                                confirmButtonText: 'Entendido'
+                              });
+                            }else{
+                              this.eventoService.eliminarEvento(evento._id).subscribe(()=>{
+                                Swal.fire({
+                                  icon: 'error',
+                                  title: 'Evento no creado',
+                                  text: resp.error,
+                                  confirmButtonText: 'Entendido'
+                                });
+                              })
+                            }
+                          }).catch(err => {
+                            console.log(err);
+                            Swal.fire({
+                              icon: 'error',
+                              title: 'Error',
+                              text: 'Error de servidor'
+                            });
+                          }); 
+                        
+                      });
+                    }else{ // No hay imagen - No hacer nada
                       Swal.fire({
-                        icon: 'success',
-                        title: 'Completado',
-                        text: 'Evento creado correctamente',
+                        icon: 'info',
+                        title: 'Evento no creado',
+                        text: 'La imagen es obligatoria',
                         confirmButtonText: 'Entendido'
                       });
+                    } 
+                  }else{ // No hay descripcion - No hacer nada
+                    Swal.fire({
+                      icon: 'info',
+                      title: 'Evento no creado',
+                      text: 'La descripción es obligatoria',
+                      confirmButtonText: 'Entendido'
                     });
                   }
-                }
-              }          
-            });
-            
-            const { value: descripcion } = await Swal.fire({
-              title: 'Descripción del evento',
-              input: 'text',
-              inputPlaceholder: 'Descripción',
-              showCancelButton: true,
-              confirmButtonText: 'Entendido',
-              cancelButtonText: 'Cancelar'
-            })
-            
-            if(tipo && descripcion){
-           
-              // Creando evento         
-              const dataEvento: Evento = {
-                descripcion,
-                tipo: tipo,
-                lat: e.latlng.lat.toString(),
-                lng: e.latlng.lng.toString(),
-              }
-  
-              this.eventoService.nuevoEvento(dataEvento).subscribe( () => {
-                this.actualizarMapa();
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Completado',
-                  text: 'Evento creado correctamente',
-                  confirmButtonText: 'Entendido'
-                });
-              });             
-            }
+                } // No hay subtipo - No hacer nada
+              } // No hay tipo - No hacer nada          
+            });            
           }         
-        }else{
+        }else{ // No hay tipos cargados en el sistema
           Swal.fire({
             icon: 'info',
             title: 'Información',
@@ -168,7 +199,6 @@ export class GeolocalizarComponent implements OnInit {
         }
       }
     });
-
   }  
 
   actualizarMapa(): void {
@@ -197,10 +227,18 @@ export class GeolocalizarComponent implements OnInit {
         // Marcador
         const marcador = L.marker([Number(evento.lat), Number(evento.lng)],{icon}).bindPopup(`
           <div class="rounded p-3">  
-          <div class="broder shadow rounded mt-2">
-            <h1 class="bg-blue-500 text-white font-semibold p-1 rounded-t text-center"> Tipo de evento </h1> 
+                    
+            <div class="broder shadow rounded mt-2">
+              <h1 class="bg-blue-500 text-white font-semibold p-1 rounded-t text-center"> Tipo de evento </h1> 
               <div class="text-center font-semibold p-1 text-gray-700">
                 <span> ${evento.tipo['descripcion']} </span> 
+              </div>
+            </div>
+
+            <div class="broder shadow rounded mt-2">
+              <h1 class="bg-blue-500 text-white font-semibold p-1 rounded-t text-center"> Subtipo de evento </h1> 
+              <div class="text-center font-semibold p-1 text-gray-700">
+                <span> ${evento.subtipo['descripcion']} </span> 
               </div>
             </div>
                         
