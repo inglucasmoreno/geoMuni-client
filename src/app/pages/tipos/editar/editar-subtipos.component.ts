@@ -9,10 +9,11 @@ import Swal from 'sweetalert2';
   templateUrl: './editar-subtipos.component.html'
 })
 export class EditarSubtiposComponent implements OnInit {
-
+  
+  public rutaVolver = '';
   public loading = false;
   public subtipo;
-
+  
   public formSubtipo = this.fb.group({
     descripcion: ['', Validators.required],  
     activo: [true, Validators.required]
@@ -24,7 +25,9 @@ export class EditarSubtiposComponent implements OnInit {
               private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe( ({id}) => {this.getSubtipo(id)} );  
+    this.activatedRoute.params.subscribe( ({id}) => {
+      this.getSubtipo(id)
+    });  
   }
 
   getSubtipo(id: string): void {
@@ -34,6 +37,7 @@ export class EditarSubtiposComponent implements OnInit {
          descripcion: subtipo.descripcion,
          activo: subtipo.activo 
       })
+      this.rutaVolver = `/dashboard/tipos/subtipos/${subtipo.tipo}`;
     });
   }
 
@@ -47,6 +51,7 @@ export class EditarSubtiposComponent implements OnInit {
       })
       return;
     }
+    this.formSubtipo.value.tipo = this.subtipo.tipo;
     this.subtiposService.actualizarSubtipo(this.subtipo._id, this.formSubtipo.value).subscribe(()=>{
       Swal.fire({
         icon: 'success',
