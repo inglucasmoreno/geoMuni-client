@@ -225,20 +225,27 @@ export class GeolocalizarComponent implements OnInit {
       iconAnchor:   [30, 38], // point of the icon which will correspond to marker's location
       popupAnchor:  [-10, -50] // point from which the popup should open relative to the iconAnchor
     })
+
+    let otrosIcon = L.icon({
+      iconUrl: 'assets/icono.png',
+      iconSize:     [45, 45], // size of the icon
+      iconAnchor:   [30, 38], // point of the icon which will correspond to marker's location
+      popupAnchor:  [-10, -50] // point from which the popup should open relative to the iconAnchor
+    })
     
     this.eventoService.listarEventos(true).subscribe( ({eventos}) => {
       eventos.forEach( (evento: Evento) => {
         
         let icon;
 
-        console.log(evento);
-
-        if(evento.tipo.descripcion == 'Luminaria'){
+        if(evento.tipo._id== '60346e793bed4837e898357f'){ // Luminarias
           icon = luminariasIcon;
-        }else if(evento.tipo.descripcion == 'Espacios verdes'){
+        }else if(evento.tipo._id == '60366ef3e835c64528c94044'){ // Espacios verdes
           icon = espaciosVerdesIcon;
-        }else if(evento.tipo.descripcion == 'Bache'){
+        }else if(evento.tipo._id == '60346dc83bed4837e898357d'){  // Baches
           icon = bachesIcon;
+        }else{
+          icon = otrosIcon;
         }
 
         // Circulo
@@ -249,8 +256,6 @@ export class GeolocalizarComponent implements OnInit {
           radius: 15
         });
         
-
-
         // Marcador
         const marcador = L.marker([Number(evento.lat), Number(evento.lng)],{icon}).bindPopup(`
           <div class="rounded p-3">  
