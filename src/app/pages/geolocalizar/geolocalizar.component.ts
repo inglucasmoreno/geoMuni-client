@@ -203,19 +203,44 @@ export class GeolocalizarComponent implements OnInit {
 
   actualizarMapa(): void {
     this.loading = true;
-    
+   
     // Icono personalizado
-    let icon = L.icon({
-      iconUrl: 'assets/icono.png',
-      iconSize:     [38, 38], // size of the icon
-      iconAnchor:   [38, 38], // point of the icon which will correspond to marker's location
+    let bachesIcon = L.icon({
+      iconUrl: 'assets/baches.png',
+      iconSize:     [45, 45], // size of the icon
+      iconAnchor:   [30, 38], // point of the icon which will correspond to marker's location
       popupAnchor:  [-10, -50] // point from which the popup should open relative to the iconAnchor
     })
 
+    let luminariasIcon = L.icon({
+      iconUrl: 'assets/luminarias.png',
+      iconSize:     [45, 45], // size of the icon
+      iconAnchor:   [30, 38], // point of the icon which will correspond to marker's location
+      popupAnchor:  [-10, -50] // point from which the popup should open relative to the iconAnchor
+    })
+
+    let espaciosVerdesIcon = L.icon({
+      iconUrl: 'assets/espacios-verdes.png',
+      iconSize:     [45, 45], // size of the icon
+      iconAnchor:   [30, 38], // point of the icon which will correspond to marker's location
+      popupAnchor:  [-10, -50] // point from which the popup should open relative to the iconAnchor
+    })
     
     this.eventoService.listarEventos(true).subscribe( ({eventos}) => {
       eventos.forEach( (evento: Evento) => {
         
+        let icon;
+
+        console.log(evento);
+
+        if(evento.tipo.descripcion == 'Luminaria'){
+          icon = luminariasIcon;
+        }else if(evento.tipo.descripcion == 'Espacios verdes'){
+          icon = espaciosVerdesIcon;
+        }else if(evento.tipo.descripcion == 'Bache'){
+          icon = bachesIcon;
+        }
+
         // Circulo
         let circulo = L.circle([Number(evento.lat), Number(evento.lng)], {
           color: '#3b82f6',
@@ -224,6 +249,8 @@ export class GeolocalizarComponent implements OnInit {
           radius: 15
         });
         
+
+
         // Marcador
         const marcador = L.marker([Number(evento.lat), Number(evento.lng)],{icon}).bindPopup(`
           <div class="rounded p-3">  
