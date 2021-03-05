@@ -14,7 +14,7 @@ export class SubtiposComponent implements OnInit {
 
   public idTipo;
   public tipo;
-  public loading = true;
+  public loading = false;
   public subtipos;
   public total = 0;
 

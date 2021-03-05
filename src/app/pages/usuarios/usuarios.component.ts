@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
-import * as moment from 'moment';
 
 import { UsuariosService } from '../../services/usuarios.service';
 import { Usuario } from '../../models/usuario.model';
@@ -39,6 +38,7 @@ export class UsuariosComponent implements OnInit {
       this.total = total;
       this.loading = false;
     }, (({error}) => {
+      this.loading = false;
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -70,6 +70,7 @@ export class UsuariosComponent implements OnInit {
             timer: 1000
           });
         }, ({error}) => {
+          this.loading = false;
           Swal.fire({
             icon: 'error',
             title: 'Error',
