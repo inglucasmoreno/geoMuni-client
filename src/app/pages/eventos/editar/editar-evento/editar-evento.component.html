@@ -1,4 +1,4 @@
-<app-tarjeta>
+<app-tarjeta width="w-full md:w-1/2">
     <div class="flex items-center justify-between md:ml-0 rounded-top text-gray-600 p-2 text-2xl font-hairline">
         <div class="flex items-center bg-gray-100 text-gray-600 font-hairline px-3 py-2 text-xl rounded-t">
             <app-boton-volver ruta='/dashboard/eventos'></app-boton-volver>
@@ -18,8 +18,8 @@
         ></app-boton-tabla>   
     </div>
     <div class="p-4 md:flex justify-between">
-        <div class="w-full md:w-1/2" *ngIf="!loading">
-            <img class="mr-auto ml-auto rounded shadow border-t-8 border-blue-500 w-full" 
+        <div class="w-11/12 mr-auto ml-auto" *ngIf="!loading">
+            <img class="rounded shadow border-t-8 border-blue-500 w-full" 
                  [src]="evento.img | imagen:'eventos'" 
                  alt="Imagen de evento">
         </div>

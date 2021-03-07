@@ -13,11 +13,11 @@ import { Usuario } from '../../models/usuario.model';
 export class UsuariosComponent implements OnInit {
 
   public usuarios: Usuario[];
-  public total = 0;
-  public limit = 10;
-  public desde = 0;
-  public hasta = 10;
-  public filtroActivo = '';
+
+  public paginacion = { total: 0, limit: 10, desde: 0, hasta: 10 };
+  public ordenar = { columna: 'apellido', direccion: 1 };
+
+  public filtroActivo = true;
   public filtroDni = '';
   public loading = true;
 
@@ -32,10 +32,17 @@ export class UsuariosComponent implements OnInit {
   }
 
   listarUsuarios(): void {
-    this.usuariosService.listarUsuarios(this.limit, this.desde, this.filtroActivo, this.filtroDni).subscribe( resp => {
+    this.usuariosService.listarUsuarios(
+      this.paginacion.limit, 
+      this.paginacion.desde, 
+      this.filtroActivo, 
+      this.filtroDni,
+      this.ordenar.columna,
+      this.ordenar.direccion
+    ).subscribe( resp => {
       const { usuarios, total } = resp;
       this.usuarios = usuarios;
-      this.total = total;
+      this.paginacion.total = total;
       this.loading = false;
     }, (({error}) => {
       this.loading = false;
@@ -88,16 +95,16 @@ export class UsuariosComponent implements OnInit {
     this.loading = true;
 
     if (selector === 'siguiente'){ // Incrementar
-      if (this.hasta < this.total){
-        this.desde += this.limit;
-        this.hasta += this.limit;
+      if (this.paginacion.hasta < this.paginacion.total){
+        this.paginacion.desde += this.paginacion.limit;
+        this.paginacion.hasta += this.paginacion.limit;
       }
     }else{                         // Decrementar
-      this.desde -= this.limit;
-      if (this.desde < 0){
-        this.desde = 0;
+      this.paginacion.desde -= this.paginacion.limit;
+      if (this.paginacion.desde < 0){
+        this.paginacion.desde = 0;
       }else{
-        this.hasta -= this.limit;
+        this.paginacion.hasta -= this.paginacion.limit;
       }
     }
 
@@ -108,12 +115,30 @@ export class UsuariosComponent implements OnInit {
   filtrarActivos(activo: any): void{
     this.loading = true;
     this.filtroActivo = activo;
+    this.reiniciarPaginacion();
     this.listarUsuarios();
   }
 
   filtrarDni(dni: string): void{
     this.loading = true;
     this.filtroDni = dni;
+    this.reiniciarPaginacion;
     this.listarUsuarios();
   }
+
+  // Ordenar por columna
+  ordenarPorColumna(columna: string){
+    this.loading = true;
+    this.ordenar.columna = columna;
+    this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1; 
+    this.listarUsuarios();  
+  }
+
+  reiniciarPaginacion() {
+    this.paginacion.total = 0;
+    this.paginacion.limit = 10;
+    this.paginacion.desde = 0;
+    this.paginacion.hasta = 10;    
+  }
+
 }

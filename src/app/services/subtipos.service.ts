@@ -27,13 +27,23 @@ export class SubtiposService {
   }
 
   // Listar subtipos
-  listarSubtipos(idTipo: string, activo = null, descripcion = '' , desde = 0, limit = 0): Observable<any> {
+  listarSubtipos(
+    idTipo: string, 
+    activo = null, 
+    descripcion = '' , 
+    desde = 0, 
+    limit = 0,
+    columna: string = 'descripcion',
+    direccion: any = 1
+  ): Observable<any> {
     return this.http.get(`${baseUrl}/subtipos/listar/${idTipo}`,{
       params: {
         activo: activo ? activo : '',
         desde: String(desde),
         limit: String(limit),
-        descripcion
+        descripcion,
+        columna,
+        direccion: String(direccion)
       },
       headers: {'x-token': localStorage.getItem('token')}
     })

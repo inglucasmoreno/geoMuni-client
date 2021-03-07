@@ -57,3 +57,16 @@
   height: 100%;
   z-index: 0;
 }
+
+input:focus {
+  outline: none;
+}
+
+select:focus {
+  outline: none;
+}
+
+/* Para evitar cuadro azul en celular al hacer clic */
+a { -webkit-tap-highlight-color: rgba(0,0,0,0); }
+button { -webkit-tap-highlight-color: rgba(0,0,0,0); }
+div { -webkit-tap-highlight-color: rgba(0,0,0,0); }

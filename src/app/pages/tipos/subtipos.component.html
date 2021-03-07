@@ -11,7 +11,7 @@
     </div>
     <div class="p-5">
         <h1 class="text-gray-600 font-semibold"> Nuevo subtipo </h1>
-        <input class="w-full rounded shadow border p-1 mt-2" 
+        <input class="w-full rounded shadow border p-2 mt-2 focus:outline-none" 
                #txtSubtipo
                placeholder="Descripción" 
                type="text">
@@ -20,17 +20,17 @@
     </div>
 </app-tarjeta>
 
-<app-tarjeta>
+<app-tarjeta width="w-11/12 md:w-1/2">
     <div class="flex items-center justify-between md:ml-4 rounded-top text-gray-600 px-3 mt-2 text-2xl font-hairline">
         <div class="flex items-center">
             <span class="ml-1"> Listado de subtipos</span>
         </div>
     </div>
     <div class="antialiased font-sans bg-gray-100 shadow">
-        <div class="container mx-auto px-4 sm:px-8">
+        <div class="mx-auto px-4 sm:px-8">
             <div class="py-2">
                 <div>
-                    <h2 class="text-2xl text-gray-700 font-semibold leading-tight"> Subtipos ({{ total }}) </h2>
+                    <h2 class="text-2xl text-gray-700 font-semibold leading-tight"> Subtipos ({{ paginacion.total }}) </h2>
                 </div> <div class="my-2 flex sm:flex-row flex-col">
                     <div class="flex flex-row mb-1 sm:mb-0">
                         <div class="relative">
@@ -74,13 +74,21 @@
                         <table class="min-w-full leading-normal">
                             <thead>
                                 <tr>
-                                    <th
-                                        class="px-5 py-3 border-b-2 border-gray-200 text-left bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        Descripcion
+                                    <th (click)="ordenarPorColumna('descripcion')"
+                                        class="px-5 py-3 cursor-pointer border-b-2 border-gray-200 text-left bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <div class="flex items-center justify-between">
+                                            <span> Descripción </span>    
+                                            <i *ngIf="ordenar.columna == 'descripcion' && ordenar.direccion == 1" class="fas fa-chevron-down ml-1"></i>
+                                            <i *ngIf="ordenar.columna == 'descripcion' && ordenar.direccion == -1" class="fas fa-chevron-up ml-1"></i>
+                                        </div>
                                     </th>
-                                    <th
-                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        ¿Activo?
+                                    <th (click)="ordenarPorColumna('activo')"
+                                        class="px-5 py-3 cursor-pointer border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <div class="flex items-center justify-between">
+                                            <span> ¿Activo? </span>    
+                                            <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == 1" class="fas fa-chevron-down ml-1"></i>
+                                            <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == -1" class="fas fa-chevron-up ml-1"></i>
+                                        </div>
                                     </th>
                                     <th
                                         class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -88,17 +96,17 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="bg-white">
                                 <tr class="animate__animated animate__fadeIn" *ngFor="let subtipo of subtipos">
-                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <td class="px-5 py-5 border-b text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap">
                                             {{ subtipo.descripcion }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 text-center border-b border-gray-200 bg-white text-sm">
+                                    <td class="px-5 py-5 text-center border-b border-gray-200 text-sm">
                                         <app-boton-estado (click)="actualizarEstado(subtipo)" [activo]="subtipo.activo"></app-boton-estado>
                                     </td>
-                                    <td class="px-5 text-center py-5 border-b border-gray-200 bg-white text-sm">
+                                    <td class="px-5 text-center py-5 border-b border-gray-200 text-sm">
                                         <div class="text-center">
                                             <div class="flex items-center justify-center">  
                                                 <app-boton-tabla 
@@ -116,7 +124,7 @@
                         </table>
                         <div class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
                             <span class="text-xs xs:text-sm text-gray-900">
-                                Mostrando {{total > 0 ? paginacion.desde + 1 : 0}} - {{ paginacion.hasta < total ? paginacion.hasta : total}} de {{ total }} eventos
+                                Mostrando {{paginacion.total > 0 ? paginacion.desde + 1 : 0}} - {{ paginacion.hasta < paginacion.total ? paginacion.hasta : paginacion.total}} de {{ paginacion.total }} eventos
                             </span>
                             <div class="inline-flex mt-2 xs:mt-0">
                                 <button 
@@ -141,3 +149,5 @@
         </div>
     </div> 
 </app-tarjeta>
+<br>
+<br>

@@ -15,13 +15,16 @@ export class EventosComponent implements OnInit {
   public tipos: Tipo;
   public eventos;
   public loading = true;
-  public total: 0;
   public descripcion = '';
   public tipo = '';
   public activo = true;
+  public ordenar = {
+    columna: 'createdAt',
+    direccion: -1,
+  }
 
   // Paginacion
-  public paginacion = { limit: 10, desde: 0, hasta: 10 }
+  public paginacion = { limit: 10, desde: 0, hasta: 10 , total: 0 }
 
   ngOnInit() {
     this.listarTipos();
@@ -41,8 +44,16 @@ export class EventosComponent implements OnInit {
   // Listar eventos
   listarEventos(): void {
     this.loading = true;
-    this.eventosServices.listarEventos(this.activo, this.paginacion.desde, this.paginacion.hasta, this.descripcion, this.tipo).subscribe( ({eventos, total}) => {
-      this.total = total;
+    this.eventosServices.listarEventos(
+      this.activo, 
+      this.paginacion.desde, 
+      this.paginacion.hasta, 
+      this.descripcion, 
+      this.tipo, 
+      this.ordenar.columna,
+      this.ordenar.direccion
+    ).subscribe( ({eventos, total}) => {
+      this.paginacion.total = total;
       this.eventos = eventos;
       this.loading = false;
     });    
@@ -81,7 +92,7 @@ export class EventosComponent implements OnInit {
     this.loading = true;
 
     if (selector === 'siguiente'){ // Incrementar
-      if (this.paginacion.hasta < this.total){
+      if (this.paginacion.hasta < this.paginacion.total){
         this.paginacion.desde += this.paginacion.limit;
         this.paginacion.hasta += this.paginacion.limit;
       }
@@ -101,6 +112,7 @@ export class EventosComponent implements OnInit {
   // Filtrado por descripcion
   filtroDescripcion(descripcion: string): void{
     this.loading = true;
+    this.reiniciarPaginacion();
     this.descripcion = descripcion;
     this.listarEventos();
   }
@@ -108,6 +120,7 @@ export class EventosComponent implements OnInit {
   // Filtrado por completada/No completada
   filtroActivo(activo: any): void {
     this.loading = true;
+    this.reiniciarPaginacion();
     this.activo = activo;
     this.listarEventos();
   }
@@ -115,8 +128,29 @@ export class EventosComponent implements OnInit {
   // Filtrado por tipo
   filtrarTipo(txtTipo: string): void {
     this.loading = true;
+    this.reiniciarPaginacion();
     this.tipo = txtTipo;
     this.listarEventos();
   }
+
+  // Ordenar por columna
+  ordenarPorColumna(columna: string){
+    this.loading = true;
+    this.ordenar.columna = columna;
+    this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1; 
+    this.listarEventos();  
+  }
+  
+  // Reiniciar paginacion
+  reiniciarPaginacion() {
+    this.paginacion.total = 0;
+    this.paginacion.limit = 10;
+    this.paginacion.desde = 0;
+    this.paginacion.hasta = 10;    
+  }
+
+  
+
+  
 
 }

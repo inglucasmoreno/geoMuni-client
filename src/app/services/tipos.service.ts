@@ -13,7 +13,6 @@ export class TiposService {
   
   constructor(private http: HttpClient) { }
 
-
   // Tipo por ID
   getTipo(id: string): Observable<any>{
     return this.http.get(`${baseUrl}/tipos/${id}`,{
@@ -31,13 +30,22 @@ export class TiposService {
   }
 
   // Listar tipos
-  listarTipos(activo = null, descripcion = '' , desde = 0, limit = 0): Observable<any> {
+  listarTipos(
+    activo = null, 
+    descripcion = '' , 
+    desde = 0, 
+    limit = 0,
+    columna: string = 'descripcion',
+    direccion: any = 1
+    ): Observable<any> {
     return this.http.get(`${baseUrl}/tipos`, { 
       params: { 
         activo: activo ? activo : '',
         desde: String(desde),
         limit: String(limit),
-        descripcion
+        descripcion,
+        columna,
+        direccion: String(direccion)
       }, 
       headers: { 'x-token': localStorage.getItem('token') }
     });

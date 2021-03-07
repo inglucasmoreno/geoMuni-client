@@ -7,20 +7,10 @@ import { AuthService } from '../services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate, CanLoad {
+export class AuthGuard implements CanActivate {
 
   constructor(private router: Router,
               private authService: AuthService){}
-  canLoad(route: Route, segments: UrlSegment[]): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-    return this.authService.validarToken()
-    .pipe(
-      tap(
-         estaAutenticado => {
-           if (!estaAutenticado){ this.router.navigateByUrl('/login'); }
-         }
-      )
-    );
-  }
 
   canActivate(
     route: ActivatedRouteSnapshot,

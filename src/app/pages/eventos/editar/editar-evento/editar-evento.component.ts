@@ -103,7 +103,8 @@ export class EditarEventoComponent implements OnInit {
         icon: 'success',
         title: 'Completado',
         text: 'Evento actualizado',
-        confirmButtonText: 'Entendido'
+        showConfirmButton: false,
+        timer: 1000
       }) 
       this.router.navigateByUrl('/dashboard/eventos'); 
     })

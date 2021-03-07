@@ -16,13 +16,15 @@ export class SubtiposComponent implements OnInit {
   public tipo;
   public loading = false;
   public subtipos;
-  public total = 0;
 
   // Filtrado
   public filtrado = { activo: true, descripcion: '' };
 
   // Paginacion
-  public paginacion = { limit: 5, desde: 0, hasta: 5 };
+  public paginacion = { limit: 5, desde: 0, hasta: 5, total: 0 };
+
+  // Ordenar
+  public ordenar = { columna: 'descripcion', direccion: 1 };
 
   constructor(private activatedRoute: ActivatedRoute,
               private subtiposService: SubtiposService,
@@ -51,9 +53,11 @@ export class SubtiposComponent implements OnInit {
       this.filtrado.activo, 
       this.filtrado.descripcion, 
       this.paginacion.desde,
-      this.paginacion.hasta
+      this.paginacion.hasta,
+      this.ordenar.columna,
+      this.ordenar.direccion
       ).subscribe(({subtipos, total}) => {
-      this.total = total;
+      this.paginacion.total = total;
       this.subtipos = subtipos;
       this.loading = false;
     });
@@ -99,7 +103,7 @@ export class SubtiposComponent implements OnInit {
     this.loading = true;
 
     if (selector === 'siguiente'){ // Incrementar
-      if (this.paginacion.hasta < this.total){
+      if (this.paginacion.hasta < this.paginacion.total){
         this.paginacion.desde += this.paginacion.limit;
         this.paginacion.hasta += this.paginacion.limit;
       }
@@ -151,14 +155,31 @@ export class SubtiposComponent implements OnInit {
 
   filtroActivo(activo: boolean): void {
     this.loading = true;
+    this.reiniciarPaginacion();
     this.filtrado.activo = activo;
     this.listarSubtipos();
   }
 
   filtroDescripcion(descripcion: string): void {
     this.loading = true;
+    this.reiniciarPaginacion();
     this.filtrado.descripcion = descripcion;
     this.listarSubtipos();
+  }
+
+    // Ordenar por columna
+    ordenarPorColumna(columna: string){
+      this.loading = true;
+      this.ordenar.columna = columna;
+      this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1; 
+      this.listarSubtipos();  
+    }  
+
+  reiniciarPaginacion() {
+    this.paginacion.total = 0;
+    this.paginacion.limit = 5;
+    this.paginacion.desde = 0;
+    this.paginacion.hasta = 5;    
   }
 
 }

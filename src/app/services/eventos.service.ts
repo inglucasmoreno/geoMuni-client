@@ -27,14 +27,24 @@ export class EventosService {
   }
 
   // Listar eventos
-  listarEventos(activo = null, desde = 0, limit = 0, descripcion = '', tipo = ''): Observable<any> {
+  listarEventos(
+    activo = null, 
+    desde = 0, 
+    limit = 0, 
+    descripcion = '', 
+    tipo = '',
+    columna = 'createdAt',
+    direccion = -1
+  ): Observable<any> {
     return this.http.get(`${baseUrl}/eventos`, {
       params: {
         activo: activo ? activo : '',
         desde: String(desde),
         limit: String(limit),
         descripcion,
-        tipo
+        tipo,
+        columna,
+        direccion: String(direccion)
       },
       headers: {'x-token': localStorage.getItem('token')}
     })

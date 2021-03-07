@@ -193,7 +193,7 @@ export class GeolocalizarComponent implements OnInit {
           Swal.fire({
             icon: 'info',
             title: 'Información',
-            text: 'Debe agregar al menos un tipo',
+            text: 'Debes agregar al menos un tipo',
             confirmButtonText: 'Entendido'
           })
         }
