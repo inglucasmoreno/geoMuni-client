@@ -205,22 +205,64 @@ export class GeolocalizarComponent implements OnInit {
     this.loading = true;
    
     // Icono personalizado
-    let bachesIcon = L.icon({
-      iconUrl: 'assets/baches.png',
+    let alumbradoIcon = L.icon({
+      iconUrl: 'assets/alumbrado.png',
       iconSize:     [45, 45], // size of the icon
       iconAnchor:   [30, 38], // point of the icon which will correspond to marker's location
       popupAnchor:  [-10, -50] // point from which the popup should open relative to the iconAnchor
     })
 
-    let luminariasIcon = L.icon({
-      iconUrl: 'assets/luminarias.png',
+    let bacheoIcon = L.icon({
+      iconUrl: 'assets/bacheo.png',
+      iconSize:     [45, 45], // size of the icon
+      iconAnchor:   [30, 38], // point of the icon which will correspond to marker's location
+      popupAnchor:  [-10, -50] // point from which the popup should open relative to the iconAnchor
+    })
+
+    let carteleriaIcon = L.icon({
+      iconUrl: 'assets/carteleria.png',
       iconSize:     [45, 45], // size of the icon
       iconAnchor:   [30, 38], // point of the icon which will correspond to marker's location
       popupAnchor:  [-10, -50] // point from which the popup should open relative to the iconAnchor
     })
 
     let espaciosVerdesIcon = L.icon({
-      iconUrl: 'assets/espacios-verdes.png',
+      iconUrl: 'assets/espacios_verdes.png',
+      iconSize:     [45, 45], // size of the icon
+      iconAnchor:   [30, 38], // point of the icon which will correspond to marker's location
+      popupAnchor:  [-10, -50] // point from which the popup should open relative to the iconAnchor
+    })
+
+    let malaSenalizacionIcon = L.icon({
+      iconUrl: 'assets/mala_senalizacion.png',
+      iconSize:     [45, 45], // size of the icon
+      iconAnchor:   [30, 38], // point of the icon which will correspond to marker's location
+      popupAnchor:  [-10, -50] // point from which the popup should open relative to the iconAnchor
+    })
+
+    let obrasPrivadaIcon = L.icon({
+      iconUrl: 'assets/obras_privadas.png',
+      iconSize:     [45, 45], // size of the icon
+      iconAnchor:   [30, 38], // point of the icon which will correspond to marker's location
+      popupAnchor:  [-10, -50] // point from which the popup should open relative to the iconAnchor
+    })
+
+    let plazasPaseosIcon = L.icon({
+      iconUrl: 'assets/plazas_paseos.png',
+      iconSize:     [45, 45], // size of the icon
+      iconAnchor:   [30, 38], // point of the icon which will correspond to marker's location
+      popupAnchor:  [-10, -50] // point from which the popup should open relative to the iconAnchor
+    })
+
+    let redesIcon = L.icon({
+      iconUrl: 'assets/redes.png',
+      iconSize:     [45, 45], // size of the icon
+      iconAnchor:   [30, 38], // point of the icon which will correspond to marker's location
+      popupAnchor:  [-10, -50] // point from which the popup should open relative to the iconAnchor
+    })
+
+    let reparacionIcon = L.icon({
+      iconUrl: 'assets/reparacion.png',
       iconSize:     [45, 45], // size of the icon
       iconAnchor:   [30, 38], // point of the icon which will correspond to marker's location
       popupAnchor:  [-10, -50] // point from which the popup should open relative to the iconAnchor
@@ -238,12 +280,24 @@ export class GeolocalizarComponent implements OnInit {
         
         let icon;
 
-        if(evento.tipo._id== '60346e793bed4837e898357f'){ // Luminarias
-          icon = luminariasIcon;
-        }else if(evento.tipo._id == '60366ef3e835c64528c94044'){ // Espacios verdes
+        if(evento.tipo._id== '6059ee256b561d230049dcf5'){         // Alumbrado publico
+          icon = alumbradoIcon;
+        }else if(evento.tipo._id == '6059ee2c6b561d230049dcf7'){  // Bacheo
+          icon = bacheoIcon;
+        }else if(evento.tipo._id == '6059ee386b561d230049dcf9'){  // Carteleria
+          icon = carteleriaIcon;
+        }else if(evento.tipo._id == '6059ee846b561d230049dcfb'){  // Espacios verdes
           icon = espaciosVerdesIcon;
-        }else if(evento.tipo._id == '60346dc83bed4837e898357d'){  // Baches
-          icon = bachesIcon;
+        }else if(evento.tipo._id == '6059ee996b561d230049dcfd'){  // Mala señalizacion
+          icon = malaSenalizacionIcon;
+        }else if(evento.tipo._id == '6059eea26b561d230049dcff'){  // Obras privadas
+          icon = obrasPrivadaIcon;
+        }else if(evento.tipo._id == '6059eeb26b561d230049dd01'){  // Plaza paseos
+          icon = plazasPaseosIcon;
+        }else if(evento.tipo._id == '6059eeb86b561d230049dd03'){  // Redes
+          icon = redesIcon;
+        }else if(evento.tipo._id == '6059eebc6b561d230049dd05'){  // Reparacion
+          icon = reparacionIcon;
         }else{
           icon = otrosIcon;
         }
@@ -297,7 +351,7 @@ export class GeolocalizarComponent implements OnInit {
         `);    
         
         marcador.addTo(this.map);
-        circulo.addTo(this.map);
+        // circulo.addTo(this.map);
         
       }); 
       this.loading = false;

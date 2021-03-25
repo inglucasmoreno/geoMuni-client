@@ -10,7 +10,7 @@ export class TarjetaComponent implements OnInit {
 
   @Input() borderColor = 'border-blue-500';
   @Input() backgroundColor = 'bg-gray-100';
-  @Input() width = 'container';
+  @Input() width = 'w-11/12';
 
   constructor() { }
 
